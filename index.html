@@ -239,23 +239,28 @@
                 </div>
 
                 <div class="bg-white rounded-2xl p-8 shadow-xl border border-slate-100 dark:border-slate-700 dark:bg-[#1e293b] dark:border-slate-700/50">
-                    <form class="space-y-6">
+                    <form id="contactForm" class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-bold mb-2">Nombre</label>
-                                <input class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
-                                       placeholder="Tu nombre" type="text">
+                                <input name="nombre"
+                                        type="text"
+                                        placeholder="Tu nombre"
+                                        class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold mb-2">Email</label>
-                                <input class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
-                                       placeholder="email@ejemplo.com" type="email">
+                                <input name="email"
+                                        type="email"
+                                        placeholder="email@ejemplo.com"
+                                        class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none">
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-bold mb-2">Servicio de interés</label>
-                            <select class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none">
+                            <select name="servicio"
+                                    class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none">
                                 <option>Desarrollo Web</option>
                                 <option>Ciberseguridad</option>
                                 <option>Análisis de Datos</option>
@@ -266,13 +271,16 @@
 
                         <div>
                             <label class="block text-sm font-bold mb-2">Mensaje</label>
-                            <textarea class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none"
+                            <textarea name="mensaje"
+                                        rows= "4"
+                                        class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none"
                                     placeholder="¿Cómo podemos ayudarte?" rows="4"></textarea>
                         </div>
 
-                        <button class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
-                            Enviar Mensaje
+                       <button type="submit" class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
+                                Enviar Mensaje
                         </button>
+                        <div id="mensajeRespuesta" class="mt-4 text-green-600 font-semibold"></div>
                     </form>
                 </div>
 
@@ -291,6 +299,37 @@
         </div>
         </div>
     </footer>
+
+    
+    
+    <!--- SCRIPT PARA ENVIAR FORMULARIO --->
+    <script>
+document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault(); // evita recargar
+
+    const formData = new FormData(this);
+
+    const response = await fetch("http://127.0.0.1:8000/enviar", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await response.json();
+
+    const mensajeDiv = document.getElementById("mensajeRespuesta");
+
+    if (response.ok) {
+        mensajeDiv.innerHTML = "¡Formulario enviado correctamente!";
+        mensajeDiv.classList.remove("text-red-600");
+        mensajeDiv.classList.add("text-green-600");
+        this.reset();
+    } else {
+        mensajeDiv.innerHTML = "❌ Error al enviar el formulario.";
+        mensajeDiv.classList.remove("text-green-600");
+        mensajeDiv.classList.add("text-red-600");
+    }
+});
+</script>
 
 </body>
 </html>

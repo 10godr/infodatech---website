@@ -4,10 +4,20 @@ from email.message import EmailMessage
 
 app = FastAPI()
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En producción luego lo limitamos
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 EMAIL_HOST = "mail.infodatech.com"
 EMAIL_PORT = 587
 EMAIL_USER = "Support@infodatech.com"
-EMAIL_PASS = "drm123"
+EMAIL_PASS = "jgc$66y<(*w4"
 
 @app.post("/enviar")
 async def enviar(
